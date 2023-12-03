@@ -184,7 +184,7 @@ in {
             initialLibraries =
               emacs-builtins.lib.builtinLibrariesOfEmacsVersion
               emacsPackage.version;
-            inventories = [
+            registries = [
               {
                 type = "melpa";
                 path = cfg.melpa + "/recipes";
