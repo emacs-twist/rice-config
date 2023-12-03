@@ -5,9 +5,9 @@
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
     emacs-ci.url = "github:purcell/nix-emacs-ci";
     twist.url = "github:emacs-twist/twist.nix";
-    rice-src.url = "path:./example";
+    rice-src.url = "github:emacs-twist/rice-config?dir=example";
     # See https://github.com/NixOS/nix/issues/9339
-    rice-lock.url = "path:./lock";
+    rice-lock.url = "github:emacs-twist/rice-config?dir=lock";
     emacs-builtins.url = "github:emacs-twist/emacs-builtins";
     emacs-builtins.inputs = {
       # This reduces the number of entries in flake.lock but functionally has no
