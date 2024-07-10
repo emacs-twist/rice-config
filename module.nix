@@ -308,6 +308,7 @@ in {
             (pkgs.mkShell {
               nativeBuildInputs = [
                 byte-compile
+                pkgs.entr
               ];
               inputsFrom = [
                 epkg
