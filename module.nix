@@ -150,9 +150,22 @@ in {
             exit 1
           fi
 
-          exec emacs -batch --no-site-file -L . \
-             --eval "(setq byte-compile-error-on-warn t)" \
-                   -f batch-byte-compile "$@"
+          ret=0
+
+          for file in "$@"
+          do
+            if emacs -batch --no-site-file -L . \
+                 --eval "(setq byte-compile-error-on-warn t)" \
+                       -f batch-byte-compile "$file"
+            then
+              printf >&2 "OK\t%s\n" "$file"
+            else
+              printf >&2 "NG\t%s\n" "$file"
+              ret=1
+            fi
+          done
+
+          exit $ret
         '';
       };
 
