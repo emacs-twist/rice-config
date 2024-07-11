@@ -135,15 +135,17 @@ in {
 
           ret=0
 
+          printf >&2 "[%s] Running byte-compile...\n" "$(date +'%Y-%m-%d %H:%M:%S')"
+
           for file in "$@"
           do
             if emacs -batch --no-site-file -L . \
                  --eval "(setq byte-compile-error-on-warn t)" \
                        -f batch-byte-compile "$file"
             then
-              printf >&2 "OK\t%s\n" "$file"
+              printf >&2 "✅[OK] %s\t(byte-compile)\n" "$file"
             else
-              printf >&2 "NG\t%s\n" "$file"
+              printf >&2 "❌[NG] %s\t(byte-compile)\n" "$file"
               ret=1
             fi
           done
@@ -212,20 +214,22 @@ in {
 
                   doCheck = elem ename cfg.localPackages;
                   checkPhase = ''
+                    printf >&2 "Testing with %s\n" "$(emacs --version | grep -E 'GNU Emacs [0-9]+')"
+
                     for f in *.el; do
                       if [[ $f = *-autoloads.el ]]; then
                         continue
                       fi
-                      echo -n "[xxx] byte-compile $f: " >&2
+                      echo >&2 "[elisp-rice] Byte-compiling $f..."
                       emacs -batch --no-site-file -L . \
                         --eval "(setq byte-compile-error-on-warn t)" \
                         -f batch-byte-compile "$f"
-                      echo OK
+                      printf >&2 "✅[OK] %s\t(%s)\n" "$f" byte-compile
                     done
 
-                    echo -n "[xxx] load ${ename}.elc: " >&2
+                    echo >&2 "[elisp-rice] Loading ${ename}.elc..."
                     emacs -batch --no-site-file -L . -l "${ename}.elc"
-                    echo OK
+                    printf >&2 "✅[OK] %s\t(%s)\n" "${ename}.elc" load
                   '';
                 }))
               esuper
