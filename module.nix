@@ -49,8 +49,9 @@ in {
                       map (
                         elispName: {
                           inherit os;
-                          x = emacsName;
-                          y = elispName;
+                          arch = githubPlatforms.${os};
+                          emacs = emacsName;
+                          target = elispName;
                         }
                       )
                       cfg.localPackages
