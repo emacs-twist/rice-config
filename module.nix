@@ -203,8 +203,8 @@ in {
               else null;
           }
         )
-        .overrideScope' (_xself: xsuper: {
-          elispPackages = xsuper.elispPackages.overrideScope' (
+        .overrideScope (_xself: xsuper: {
+          elispPackages = xsuper.elispPackages.overrideScope (
             _eself: esuper:
               mapAttrs (ename: epkg:
                 epkg.overrideAttrs (_: {
