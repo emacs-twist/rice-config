@@ -70,24 +70,6 @@ in {
               )
               (attrNames githubPlatforms));
         };
-
-        commands = lib.genAttrs (attrNames githubPlatforms) (
-          os:
-            lib.genAttrs (attrNames ((getSystem githubPlatforms.${os}).elisp-rice.emacsPackageSet))
-            (
-              emacsName:
-                lib.genAttrs
-                cfg.localPackages
-                (
-                  elispName: let
-                    system = githubPlatforms.${os};
-                    name = compileName {inherit emacsName elispName;};
-                  in ''
-                    nix build -L .#checks.${system}.${name}
-                  ''
-                )
-            )
-        );
       };
     };
   };
