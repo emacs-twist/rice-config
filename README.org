@@ -1,0 +1,186 @@
+* Meta Nix Flake for Developing Emacs Lisp Projects
+This is a Nix flake that lets you configure checking of Emacs Lisp packages (both locally and on CI).
+
+There are several alternatives for Emacs Lisp CI, but this project is unique in that it is powered by Nix and provides the following most notable features:
+
+- In continuous integration, this project makes it easy to run byte-compile (and testing in the future) on all Emacs versions supported by your package(s). It is aimed at authors who maintain a number of Emacs Lisp packages.
+- In local usage, it can integrate with [[https://github.com/cachix/git-hooks.nix][Nix Git hooks]], so it even nicely supports projects that contain multiple programming languages.
+
+This is a meta-framework in that you can reuse a single flake across multiple projects.
+You can fork this repository to personalize your workflows and then use it in all of your Emacs Lisp projects.
+If your project is complex enough to require a specific flake configuration, you can copy the ~flake.nix~ from this repository and use it in the single repository.
+The common code is maintained in a separate repository as a flake-parts module, so you don't have to merge upstream bugfixes by hand.
+
+To use this project, you will need some experience with Nix, but the resulting configuration of each project will be extremely concise.
+** Installation
+*** (Optional) Fork this repository
+It is possible to use this ~rice-config~ repository directly, but a recommended way is to fork the repository and add ~flake.lock~ to it.
+
+*Disclaimer*​: This repository depends on third-party repositories via flake inputs and doesn't lock the inputs, which is open to supply-chain attacks.
+I trust the organizations of the upstream projects, and it should be mostly safe as long as you run pure evaluation of Nix as suggested in this document, but I won't be responsible for any security problem caused by one of the upstream projects.
+Note that this repository may add new dependencies in the future, and you won't be notified in advance if you directly use the flake.
+For your safety, I would recommend tracking the inputs for yourself, rather than to be at stake of unknown third-party developers.
+It's a constant effort how many projects you maintain, granted that you have only one ~rice-config~ repository for all of them.
+
+First fork this repository on GitHub and clone it to your computer:
+
+#+begin_src sh
+  git clone github:YOUR-USER/rice-config
+#+end_src
+
+Then generate ~flake.lock~:
+
+#+begin_src sh
+  cd rice-config
+  nix flake lock
+#+end_src
+
+Commit the lock file and push it to your forked repository.
+*** Create a MELPA recipe for your package
+Twist, the Nix library of Rice, primarily supports MELPA, and Rice currently targets projects that are submitted to MELPA.
+
+If your package is not available on MELPA yet, you have to create a MELPA recipe as if you are planning on submission in the future.
+
+1. First fork [[https://github.com/melpa/melpa][MELPA]] on your GitHub account.
+2. Create a recipe for your package and save it to ~recipes/PACKAGE-NAME~ in the repository. [[https://github.com/melpa/melpa?tab=readme-ov-file#recipe-format][The recipe format]] is S-exp-based, and you can edit it using ~lisp-data-mode~ on Emacs.
+3. Commit the recipe and push it to a branch on your remote repository.
+
+An example of the most basic recipe is as follows:
+
+#+begin_src elisp
+  (hello :fetcher github :repo "your-user/hello.el")
+#+end_src
+*** Add flake.nix and (optional) justfile
+Add ~flake.nix~ to your individual project.
+An example is as follows:
+
+#+begin_src nix
+  {
+    outputs = {...}: {
+      elisp-rice = {
+        packages = ["hello"];
+      };
+    };
+  }
+#+end_src
+
+In this example, ~hello~ is the name of your package.
+If your package contains multiple source files, you only specify the main library.
+If your repository contains multiple packages, you have to specify all of them in ~packages~.
+
+FIXME: To make life easier, it is recommended to add ~justfile~ to individual projects.
+*** (Optional) Set up a CI on GitHub Actions
+We provide reusable GitHub workflows for running common checks on CI.
+Check out elisp-workflows repository.
+You can call the workflows directly, or fork the repository and maintain it for yourself, if you worry about security.
+Note that the workflows don't require the ~justfile~.
+** Usage
+Once your project is set up, this ~rice-config~ repository (or its fork) will become a Nix flake that provides the interface.
+You will use the flake with the following inputs overridden for your project:
+
+- ~rice-src~ :: The source repository of your project.
+- ~rice-lock~ :: The lock directory tracking the Emacs Lisp dependencies of your project. This is optional if your project only depends on built-in libraries.
+- ~melpa~ :: A repository containing the recipe for your project.
+
+You *could*​ browse the flake interface using ~nix flake show~ as follows:
+
+#+begin_src sh
+  nix flake show github:your-user/rice-config \
+      --override-input rice-src "path:$PWD" \
+      --override-input rice-lock "path:$PWD/lock" \
+      --override-input melpa github:your-user/melpa/your-package
+#+end_src
+
+However, it is tedious to repeat the ~--override-input~ options for all of the commands, so the ~justfile~ provides the following shorthand:
+
+#+begin_src sh
+  just show
+#+end_src
+
+~just show~ also accepts Nix options:
+
+#+begin_src sh
+  just show --json
+#+end_src
+
+Another way to inspect the flake is ~nix eval~, and the ~justfile~ provides a shorthand for the command:
+
+#+begin_src sh
+  just eval melpaRecipes --apply builtins.attrNames --json
+#+end_src
+
+You can browse the recipes in ~justfile~ from the command line:
+
+#+begin_src sh
+  just -l
+#+end_src
+*** Byte-compile
+In recent years, the byte-compiler of Emacs has made a significant advancement, and it is one of the most useful tools for linting Emacs Lisp code.
+Rice primarily aims at integrating the byte-compiler into your development workflow.
+**** Running byte-compile on a specific Emacs version
+#+begin_src sh
+  just check-compile
+#+end_src
+
+This compiles all source files in the package in a sandboxed environment of Nix.
+It is generally suitable for CI, but you can run it locally for faster feedback, without waiting for CI.
+
+It runs ~nix build~ on one of the outputs under ~checks~ (e.g. ~#checks.x86_64-linux.hello-compile-emacs-29-4~) with the inputs overridden.
+**** Shell for byte-compiling
+#+begin_src sh
+  just shell-compile
+#+end_src
+
+Once you enter the shell, you can byte-compile individual source files by running a wrapper script:
+
+#+begin_src sh
+  elisp-byte-compile SOURCE..
+#+end_src
+
+This is more suitable during development, because you can re-run the command after you edit a source file without reloading the Nix environment.
+However, I would recommend use of watch mode, which I will described later.
+
+Technically, this ~justfile~ recipe is a wrapper for one of the outputs under ~devShells~ (e.g. ~devShells.x86_64-linux.emacs-29-4-for-hello~).
+The shell environment provides Emacs with the package dependencies (but not the package itself).
+**** Watch mode
+You can re-run byte-compile whenever a file is changed:
+
+#+begin_src sh
+  just watch-compile
+#+end_src
+
+It enters the same shell as ~just shell-compile~ but runs a command in the shell.
+Internally, it uses ~entr~ to watch file changes.
+~entr~ is bundled in the shell but light on size.
+*** Testing (manual/automated)
+Testing should be done on all supported Emacs versions, which can be tedious for package authors and maintainers.
+This is another area where Rice is trying to improve.
+**** Shell with a specific Emacs version
+You can enter a shell with the package(s) available:
+
+#+begin_src sh
+  just shell-emacs
+#+end_src
+
+You can run ~emacs -q~ to start Emacs without your init file loaded.
+That environment will be suitable for manual testing your package in a reproducible manner.
+You can also run Emacs with ~-batch~ flag to dispatch automated testing.
+
+This enters a shell environment with one of the packages under ~packages~ (e.g. ~packages.x86_64-linux.emacs-29-4-with-packages~).
+The recipe accepts options, which are passed to ~nix shell~, so you can run a test suite directly:
+
+#+begin_src sh
+  just shell --command emacs -batch -L tests -l hello-test
+#+end_src
+** Plans
+This project does not support all common types of checking in Emacs Lisp yet.
+The following should be covered in the future:
+
+- [[https://github.com/purcell/package-lint][package-lint]]: This requires ~package.el~ to download dependencies, so it requires internet connection, which cannot be run in a pure Nix environment. It should be an application provided under ~packages~ output of the flake.
+- ~checkdoc~ and other minor checks that can be run statically: This should be an optional addition to ~checks~. Only one Emacs version (either the latest release or a snapshot version) would be enough.
+- Tests (ERT, [[https://github.com/jorgenschaefer/emacs-buttercup/][buttercup]], etc.): The user may depend on a third-party package for testing. Thus the rice-config should allow the user to define extra packages in individual package flakes. The extra packages will be available in the Emacs environments provided from ~packages~ (and its wrapper, ~just shell-emacs~).
+
+The above tasks are likely to require enhancement of the rice module.
+** Contributing
+An improvement or enhancement to this flake is welcome.
+Please feel free to open a ticket to request a feature or send a PR to implement a planned feature.
