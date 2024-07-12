@@ -3,6 +3,14 @@
     systems.url = "github:nix-systems/default";
     flake-parts.url = "github:hercules-ci/flake-parts";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
+
+    elisp-rice.url = "github:emacs-twist/elisp-rice";
+    elisp-rice.inputs = {
+      # This reduces the number of entries in flake.lock but functionally has no
+      # effect.
+      emacs-builtins.inputs.emacs-ci.follows = "emacs-ci";
+      emacs-builtins.inputs.twist.follows = "twist";
+    };
     emacs-ci.url = "github:purcell/nix-emacs-ci";
     twist.url = "github:emacs-twist/twist.nix";
     rice-src.url = "github:emacs-twist/rice-config?dir=example";
@@ -34,12 +42,7 @@
       systems = import systems;
       imports = [
         inputs.pre-commit-hooks-nix.flakeModule
-        (
-          {flake-parts-lib, ...}:
-            flake-parts-lib.importApply ./module.nix {
-              inherit (inputs) emacs-builtins;
-            }
-        )
+        inputs.elisp-rice.flakeModules.default
       ];
 
       elisp-rice = {
