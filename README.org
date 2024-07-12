@@ -9,7 +9,7 @@ There are several alternatives for Emacs Lisp CI, but this project is unique in 
 This is a meta-framework in that you can reuse a single flake across multiple projects.
 You can fork this repository to personalize your workflows and then use it in all of your Emacs Lisp projects.
 If your project is complex enough to require a specific flake configuration, you can copy the ~flake.nix~ from this repository and use it in the single repository.
-The common code is maintained in a separate repository as a flake-parts module, so you don't have to merge upstream bugfixes by hand.
+The common code is maintained in [[https://github.com/emacs-twist/elisp-rice][a separate repository]] as a [[https://flake.parts/][flake-parts]] module, so you don't have to merge upstream bugfixes by hand.
 
 To use this project, you will need some experience with Nix, but the resulting configuration of each project will be extremely concise.
 ** Installation
@@ -71,7 +71,7 @@ If your repository contains multiple packages, you have to specify all of them i
 FIXME: To make life easier, it is recommended to add ~justfile~ to individual projects.
 *** (Optional) Set up a CI on GitHub Actions
 We provide reusable GitHub workflows for running common checks on CI.
-Check out elisp-workflows repository.
+Check out [[https://github.com/emacs-twist/elisp-workflows][elisp-workflows]] repository.
 You can call the workflows directly, or fork the repository and maintain it for yourself, if you worry about security.
 Note that the workflows don't require the ~justfile~.
 ** Usage
