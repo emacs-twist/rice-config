@@ -4,12 +4,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     elisp-rice.url = "github:emacs-twist/elisp-rice";
-    elisp-rice.inputs = {
-      # This reduces the number of entries in flake.lock but functionally has no
-      # effect.
-      emacs-builtins.inputs.emacs-ci.follows = "emacs-ci";
-      emacs-builtins.inputs.twist.follows = "twist";
-    };
 
     # Dependencies of rice itself and this rice configuration.
     emacs-ci.url = "github:purcell/nix-emacs-ci";
