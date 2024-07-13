@@ -57,7 +57,20 @@ An example of the most basic recipe is as follows:
   (hello :fetcher github :repo "your-user/hello.el")
 #+end_src
 *** Add flake.nix and (optional) justfile
-Add ~flake.nix~ to your individual project.
+You have to add ~flake.nix~ to your individual projects.
+While it is possible to use its flake API only with ~nix~ command, the commands are quite verbose and hence your developer experience would be painful.
+On your machine, it is recommended to use [[https://just.systems/man/en/][just]] (which is like a modern Make for running commands) for the development workflow.
+
+I have created [[https://github.com/akirak/flake-templates?tab=readme-ov-file#emacs-lisp][a flake template]] that provides a boilerplate with ~flake.nix~, ~justfile~, and some other typical configuration files.
+With this template, you can get started with local development and GitHub Actions CI by editing some parameters.
+You can add the configuration files to your existing project by running the following command:
+
+#+begin_src sh
+  nix flake init -t github:akirak/flake-templates#emacs-lisp
+#+end_src
+
+The content of ~flake.nix~ in individual projects should be minimal.
+If you have initialized the file from the flake template, you only have to set ~elisp-rice.packages~ in the outputs.
 An example is as follows:
 
 #+begin_src nix
@@ -74,7 +87,11 @@ In this example, ~hello~ is the name of your package.
 If your package contains multiple source files, you only specify the main library.
 If your repository contains multiple packages, you have to specify all of them in ~packages~.
 
-FIXME: To make life easier, it is recommended to add ~justfile~ to individual projects.
+Also, open ~justfile~ to adapt it to your project.
+You only need to edit variables.
+You must set ~package~, and you may also have to set ~rice-config~, ~melpa~, and ~emacs-version~ as well.
+
+The ~justfile~ only supports a single package and a single Emacs version, but you can override it at runtime using ~--set~ option of ~just~ or even edit ~justfile~ without committing it to the repository.
 *** (Optional) Set up a CI on GitHub Actions
 We provide reusable GitHub workflows for running common checks on CI.
 Check out [[https://github.com/emacs-twist/elisp-workflows][elisp-workflows]] repository.
