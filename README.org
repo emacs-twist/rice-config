@@ -17,8 +17,8 @@ To use this flake on your machine, you need the following requirements:
 
 - Git (required)
 - Nix with flakes enabled (required)
-- [[https://just.systems/man/en/][just]] (optional but recommended for usability)
-- [[https://cli.github.com/][GitHub CLI]], a.k.a. ~gh~ (optional but recommended)
+- [[https://just.systems/man/en/][just]] (optional but strongly recommended for usability)
+- [[https://cli.github.com/][GitHub CLI]], a.k.a. ~gh~ (optional but useful in some situations)
 *** (Optional) Fork this repository
 It is possible to use this ~rice-config~ repository directly, but a recommended way is to fork the repository and add ~flake.lock~ to it.
 
