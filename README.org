@@ -13,6 +13,12 @@ The common code is maintained in [[https://github.com/emacs-twist/elisp-rice][a 
 
 To use this project, you will need some experience with Nix, but the resulting configuration of each project will be extremely concise.
 ** Installation
+To use this flake on your machine, you need the following requirements:
+
+- Git (required)
+- Nix with flakes enabled (required)
+- [[https://just.systems/man/en/][just]] (optional but recommended for usability)
+- [[https://cli.github.com/][GitHub CLI]], a.k.a. ~gh~ (optional but recommended)
 *** (Optional) Fork this repository
 It is possible to use this ~rice-config~ repository directly, but a recommended way is to fork the repository and add ~flake.lock~ to it.
 
