@@ -20,13 +20,15 @@ To use this flake on your machine, you need the following requirements:
 - [[https://just.systems/man/en/][just]] (optional but strongly recommended for usability)
 - [[https://cli.github.com/][GitHub CLI]], a.k.a. ~gh~ (optional but useful in some situations)
 *** (Optional) Fork this repository
-It is possible to use this ~rice-config~ repository directly, but a recommended way is to fork the repository and add ~flake.lock~ to it.
+Because of security concerns, it is discouraged to use this ~rice-config~ repository directly. Instead, I would recommend that you fork the repository and add ~flake.lock~ to it.
 
-*Disclaimer*​: This repository depends on third-party repositories via flake inputs and doesn't lock the inputs, which is open to supply-chain attacks.
-I trust the organizations of the upstream projects, and it should be mostly safe as long as you run pure evaluation of Nix as suggested in this document, but I won't be responsible for any security problem caused by one of the upstream projects.
-Note that this repository may add new dependencies in the future, and you won't be notified in advance if you directly use the flake.
-For your safety, I would recommend tracking the inputs for yourself, rather than to be at stake of unknown third-party developers.
-It's a constant effort how many projects you maintain, granted that you have only one ~rice-config~ repository for all of them.
+This repository depends on third-party repositories via its flake inputs. The inputs are not locked, which is open to supply-chain attacks.
+The upstream projects of this flake are well trusted in the Nix community, and they should be safe as long as you run pure evaluation of Nix.
+However, I am irresponsible for any security problem caused by any of the projects maintained outside of this organization.
+Also note that this repository may add new dependencies in the future.
+In such a situation, you won't be notified of the change beforehand, if you use the flake without locking the input.
+For the reasons described above, I would recommend tracking the inputs for yourself, rather than to be at stake of unknown third-party developers.
+The maintenance effort would be near constant no matter how many projects you maintain, given that you will have only one flake for all of them.
 
 First fork this repository on GitHub and clone it to your computer:
 
@@ -209,22 +211,22 @@ The above tasks are likely to require enhancement of the rice module.
 :CUSTOM_ID: alternatives
 :END:
 As mentioned earlier, several alternatives do exist for checking Emacs Lisp packages.
-See [[https://github.com/alphapapa/makem.sh/?tab=readme-ov-file#comparisons][comparisons]] by the author of [[https://github.com/alphapapa/makem.sh/][makem.sh]] for earlier projects.
+For information on eariler projects, see [[https://github.com/alphapapa/makem.sh/?tab=readme-ov-file#comparisons][comparisons]] by the author of [[https://github.com/alphapapa/makem.sh/][makem.sh]].
 Below is a list of some (but not comprehensive) recent projects:
 
 - [[https://emacs-eask.github.io/][eask]], which seems actively developed and reliable
 - [[https://github.com/riscy/melpazoid/][melpazoid]] by one of the maintainers of MELPA
-- [[https://github.com/leotaku/elisp-check][elisp-check]], which focuses on excellent CI on GitHub Actions
+- [[https://github.com/leotaku/elisp-check][elisp-check]], which works great on GitHub Actions
 
-Rice/rice-config isn't meant to be a superset/competitor of these projects.
+Rice doesn't aims to be a superset/competitor of these projects.
 It is:
 
-- Built with Nix (and [[https://github.com/emacs-twist/twist.nix][twist.nix]]) to support reproducibility, integration with native (non Emacs Lisp) dependencies, avoiding S-exp (or any other custom) DSLs, and Nix-oriented workflows including end-to-end/UI testing involving the Emacs Lisp package(s) under test.
-- Tightly integrated with [[https://github.com/purcell/nix-emacs-ci][nix-emacs-ci]] to support generating a CI matrix for multiple Emacs versions with minimal configuration.
-- Designed to help the user maintain a number of Emacs Lisp projects continuously with the least effort.
+- Built with Nix (and [[https://github.com/emacs-twist/twist.nix][twist.nix]]) to support reproducibility, integration with native (non Emacs Lisp) dependencies, avoiding S-exp (or any other custom) DSLs. The nature of defining everything in Nix would allow end-to-end/UI testing involving the Emacs Lisp package(s) under test.
+- Integrating [[https://github.com/purcell/nix-emacs-ci][nix-emacs-ci]] to support generating an up-to-date CI matrix, without needing manual configuration.
+- Designed to help the user maintain a number of Emacs Lisp projects, by centralizing the configuration in a single place.
 
 Rice is an immature project and does not support as many checks as earlier projects.
-Because of this, I won't provide a comprehensive list of feature comparisons yet.
+Because of this, I won't provide a list of feature comparisons yet.
 ** Contributing
 An improvement or enhancement to this flake is welcome.
 Please feel free to open a ticket to request a feature or send a PR to implement a planned feature.
