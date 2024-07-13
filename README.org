@@ -193,7 +193,7 @@ This enters a shell environment with one of the packages under ~packages~ (e.g. 
 The recipe accepts options, which are passed to ~nix shell~, so you can run a test suite directly:
 
 #+begin_src sh
-  just shell --command emacs -batch -L tests -l hello-test
+  just shell-emacs --command emacs -batch -L tests -l hello-test
 #+end_src
 ** Plans
 This project does not support all common types of checking in Emacs Lisp yet.
