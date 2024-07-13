@@ -218,7 +218,7 @@ Below is a list of some (but not comprehensive) recent projects:
 - [[https://github.com/riscy/melpazoid/][melpazoid]] by one of the maintainers of MELPA
 - [[https://github.com/leotaku/elisp-check][elisp-check]], which works great on GitHub Actions
 
-Rice doesn't aims to be a superset/competitor of these projects.
+Rice doesn't aim to be a superset/competitor of these projects.
 It is:
 
 - Built with Nix (and [[https://github.com/emacs-twist/twist.nix][twist.nix]]) to support reproducibility, integration with native (non Emacs Lisp) dependencies, avoiding S-exp (or any other custom) DSLs. The nature of defining everything in Nix would allow end-to-end/UI testing involving the Emacs Lisp package(s) under test.
