@@ -31,12 +31,13 @@
 
   outputs = {
     flake-parts,
-    systems,
     nixpkgs,
     ...
-  } @ inputs:
+  } @ inputs: let
+    systems = import inputs.systems;
+  in
     flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = import systems;
+      inherit systems;
       imports = [
         inputs.pre-commit-hooks-nix.flakeModule
         inputs.elisp-rice.flakeModules.default
@@ -49,6 +50,9 @@
         melpa = inputs.melpa.outPath;
         lockDir = inputs.rice-lock.outPath;
         lockInputName = "rice-lock";
+        github = {
+          inherit systems;
+        };
       };
 
       perSystem = {
