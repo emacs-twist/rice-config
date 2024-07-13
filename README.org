@@ -216,7 +216,7 @@ Below is a list of some (but not comprehensive) recent projects:
 Rice/rice-config isn't meant to be a superset/competitor of these projects.
 It is:
 
-- Built with Nix (and [[https://github.com/emacs-twist/twist.nix][twist.nix]]) to support reproducibility, integration with native (non Emacs Lisp) dependencies, avoiding S-exp (or any other custom) DSLs, and Nix-oriented workflows.
+- Built with Nix (and [[https://github.com/emacs-twist/twist.nix][twist.nix]]) to support reproducibility, integration with native (non Emacs Lisp) dependencies, avoiding S-exp (or any other custom) DSLs, and Nix-oriented workflows including end-to-end/UI testing involving the Emacs Lisp package(s) under test.
 - Tightly integrated with [[https://github.com/purcell/nix-emacs-ci][nix-emacs-ci]] to support generating a CI matrix for multiple Emacs versions with minimal configuration.
 - Designed to help the user maintain a number of Emacs Lisp projects continuously with the least effort.
 
