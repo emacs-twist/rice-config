@@ -1,7 +1,7 @@
 * Meta Nix Flake for Developing Emacs Lisp Projects
 This is a Nix flake that lets you configure checking of Emacs Lisp packages (both locally and on CI).
 
-There are several alternatives for Emacs Lisp CI, but this project is unique in that it is powered by Nix and provides the following most notable features:
+There are [[*Alternatives][several alternatives]] for Emacs Lisp CI, but this project is unique in that it is powered by Nix and provides the following most notable features:
 
 - In continuous integration, this project makes it easy to run byte-compile (and testing in the future) on all Emacs versions supported by your package(s). It is aimed at authors who maintain a number of Emacs Lisp packages.
 - In local usage, it can integrate with [[https://github.com/cachix/git-hooks.nix][Nix Git hooks]], so it even nicely supports projects that contain multiple programming languages.
@@ -181,6 +181,24 @@ The following should be covered in the future:
 - Tests (ERT, [[https://github.com/jorgenschaefer/emacs-buttercup/][buttercup]], etc.): The user may depend on a third-party package for testing. Thus the rice-config should allow the user to define extra packages in individual package flakes. The extra packages will be available in the Emacs environments provided from ~packages~ (and its wrapper, ~just shell-emacs~).
 
 The above tasks are likely to require enhancement of the rice module.
+** Alternatives
+As mentioned earlier, several alternatives do exist for checking Emacs Lisp packages.
+See [[https://github.com/alphapapa/makem.sh/?tab=readme-ov-file#comparisons][comparisons]] by the author of [[https://github.com/alphapapa/makem.sh/][makem.sh]] for earlier projects.
+Below is a list of some (but not comprehensive) recent projects:
+
+- [[https://emacs-eask.github.io/][eask]], which seems actively developed and reliable
+- [[https://github.com/riscy/melpazoid/][melpazoid]] by one of the maintainers of MELPA
+- [[https://github.com/leotaku/elisp-check][elisp-check]], which focuses on excellent CI on GitHub Actions
+
+Rice/rice-config isn't meant to be a superset/competitor of these projects.
+It is:
+
+- Built with Nix (and [[https://github.com/emacs-twist/twist.nix][twist.nix]]) to support reproducibility, integration with native (non Emacs Lisp) dependencies, avoiding S-exp (or any other custom) DSLs, and Nix-oriented workflows.
+- Tightly integrated with [[https://github.com/purcell/nix-emacs-ci][nix-emacs-ci]] to support generating a CI matrix for multiple Emacs versions with minimal configuration.
+- Designed to help the user maintain a number of Emacs Lisp projects continuously with the least effort.
+
+Rice is an immature project and does not support as many checks as earlier projects.
+Because of this, I won't provide a comprehensive list of feature comparisons yet.
 ** Contributing
 An improvement or enhancement to this flake is welcome.
 Please feel free to open a ticket to request a feature or send a PR to implement a planned feature.
