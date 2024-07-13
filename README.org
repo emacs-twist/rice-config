@@ -1,7 +1,7 @@
 * Meta Nix Flake for Developing Emacs Lisp Projects
 This is a Nix flake that lets you configure checking of Emacs Lisp packages (both locally and on CI).
 
-There are [[*Alternatives][several alternatives]] for Emacs Lisp CI, but this project is unique in that it is powered by Nix and provides the following most notable features:
+There are [[#alternatives][several alternatives]] for Emacs Lisp CI, but this project is unique in that it is powered by Nix and provides the following most notable features:
 
 - In continuous integration, this project makes it easy to run byte-compile (and testing in the future) on all Emacs versions supported by your package(s). It is aimed at authors who maintain a number of Emacs Lisp packages.
 - In local usage, it can integrate with [[https://github.com/cachix/git-hooks.nix][Nix Git hooks]], so it even nicely supports projects that contain multiple programming languages.
@@ -205,6 +205,9 @@ The following should be covered in the future:
 
 The above tasks are likely to require enhancement of the rice module.
 ** Alternatives
+:PROPERTIES:
+:CUSTOM_ID: alternatives
+:END:
 As mentioned earlier, several alternatives do exist for checking Emacs Lisp packages.
 See [[https://github.com/alphapapa/makem.sh/?tab=readme-ov-file#comparisons][comparisons]] by the author of [[https://github.com/alphapapa/makem.sh/][makem.sh]] for earlier projects.
 Below is a list of some (but not comprehensive) recent projects:
