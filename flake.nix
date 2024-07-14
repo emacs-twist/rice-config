@@ -74,7 +74,7 @@
         # Configure the per-system Emacs package set.
         elisp-rice = {
           emacsPackageSet = inputs.emacs-ci.packages.${system};
-          defaultEmacsPackage = inputs.emacs-ci.packages.emacs-snapshot;
+          defaultEmacsPackage = inputs.emacs-ci.packages.${system}.emacs-snapshot;
         };
 
         # Enable pre-commit by entering the Nix devShell.
