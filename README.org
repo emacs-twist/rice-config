@@ -112,9 +112,12 @@ You *could*​ browse the flake interface using ~nix flake show~ as follows:
 #+begin_src sh
   nix flake show github:your-user/rice-config \
       --override-input rice-src "path:$PWD" \
-      --override-input rice-lock "path:$PWD/lock" \
+      --override-input rice-lock "path:$PWD/.rice-lock/default" \
       --override-input melpa github:your-user/melpa/your-package
 #+end_src
+
+Note the above command (or any evaluation on this flake) *doesn't work*​ if the lock directory has a missing dependency.
+See the next subsection on how to initialize the lock directory.
 
 However, it is tedious to repeat the ~--override-input~ options for all of the commands, so the ~justfile~ provides the following shorthand:
 
@@ -139,6 +142,29 @@ You can browse the recipes in ~justfile~ from the command line:
 #+begin_src sh
   just -l
 #+end_src
+*** Initializing a lock directory
+The ~justfile~ contains a recipe for initializing a lock directory.
+
+#+begin_src sh
+  just lock
+#+end_src
+
+The lock directory will be created in ~lock-dir~ defined in the ~justfile~.
+By default, the location is ~.rice-lock/default~, but you can create multiple lock directories by overriding the variable:
+
+#+begin_src sh
+  just --set lock-dir .rice-lock/secondary lock
+#+end_src
+
+However, it is recommended to use the minimum version of Emacs supported by your package to generate a lock directory that contains all dependencies:
+
+#+begin_src sh
+  just --set emacs emacs-27-1 lock
+#+end_src
+
+The above command generates a lock directory that contains all dependencies to make your package run on Emacs 27.1.
+Generally speaking, a newer version of Emacs has more built-in packages, so it's safe to use the oldest version of Emacs.
+You can still create multiple versions of lock directories.
 *** Byte-compile
 In recent years, the byte-compiler of Emacs has made a significant advancement, and it is one of the most useful tools for linting Emacs Lisp code.
 Rice primarily aims at integrating the byte-compiler into your development workflow.
