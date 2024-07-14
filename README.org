@@ -165,6 +165,19 @@ However, it is recommended to use the minimum version of Emacs supported by your
 The above command generates a lock directory that contains all dependencies to make your package run on Emacs 27.1.
 Generally speaking, a newer version of Emacs has more built-in packages, so it's safe to use the oldest version of Emacs.
 You can still create multiple versions of lock directories.
+
+To override an existing directory, you need to set ~--force~ option:
+
+#+begin_src sh
+  just --set emacs emacs-27-1 lock --force
+#+end_src
+
+The lock command supports some other options.
+You can view the help:
+
+#+begin_src sh
+  just lock --help
+#+end_src
 *** Byte-compile
 In recent years, the byte-compiler of Emacs has made a significant advancement, and it is one of the most useful tools for linting Emacs Lisp code.
 Rice primarily aims at integrating the byte-compiler into your development workflow.
