@@ -15,6 +15,9 @@
     # override this. Also see https://github.com/NixOS/nix/issues/9339
     rice-lock.url = "github:emacs-twist/rice-config?dir=lock";
 
+    registries.url = "github:emacs-twist/registries";
+    registries.inputs.melpa.follows = "melpa";
+
     # Inputs that can be customized depending on your project.
     melpa.url = "github:melpa/melpa";
     melpa.flake = false;
@@ -47,12 +50,12 @@
       elisp-rice = {
         localPackages = inputs.rice-src.elisp-rice.packages;
         src = inputs.rice-src.outPath;
-        melpa = inputs.melpa.outPath;
         lockDir = inputs.rice-lock.outPath;
         lockInputName = "rice-lock";
         github = {
           inherit systems;
         };
+        registries = inputs.registries.lib.registries;
       };
 
       perSystem = {
