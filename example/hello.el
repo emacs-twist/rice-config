@@ -1,6 +1,6 @@
 ;;; hello.el --- An example Emacs Lisp file -*- lexical-binding: t -*-
 
-;; Copyright (C) 2024 Akira Komamura
+;; Copyright (C) 2024 Emacs Twist
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
