@@ -87,7 +87,7 @@
         # in the Nix sandbox. You must disable this check to enable the
         # byte-compile hook.
         pre-commit.check.enable = false;
-        pre-commit.settings.excludes = ["^lock/"];
+        pre-commit.settings.excludes = ["^.rice-lock/"];
 
         # pre-commit checks for non-elisp files (optional)
         pre-commit.settings.hooks.actionlint.enable = true;
