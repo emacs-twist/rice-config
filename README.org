@@ -163,7 +163,7 @@ Once you enter the shell, you can byte-compile individual source files by runnin
 #+end_src
 
 This is more suitable during development, because you can re-run the command after you edit a source file without reloading the Nix environment.
-However, I would recommend use of watch mode, which I will described later.
+However, I would recommend use of watch mode, which I will describe later.
 
 Technically, this ~justfile~ recipe is a wrapper for one of the outputs under ~devShells~ (e.g. ~devShells.x86_64-linux.emacs-29-4-for-hello~).
 The shell environment provides Emacs with the package dependencies (but not the package itself).
