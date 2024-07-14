@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      master
+    paths-ignore:
+      - '*.md'
+      - '*README.*'
+
+jobs:
+  check-flake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@V27
+        with:
+          extra_nix_config: |
+            accept-flake-config = true
+
+      - name: Lock
+        run: |
+          nix flake lock \
+            --override-input rice-src "path:$PWD/example" \
+            --override-input rice-lock "path:$PWD/lock" \
+            --override-input melpa github:emacs-twist/melpa/hello-for-rice
+
+      - name: Show the outputs
+        run: nix flake show
+
+      - name: Build a package
+        run: nix build .#checks.x86_64-linux.hello-compile-emacs-snapshot
+
+      - name: Print eval APIs
+        run: |
+          nix eval .#github --json | jq .
+          nix eval .#melpaRecipes --json | jq .
