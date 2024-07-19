@@ -46,16 +46,8 @@
         inputs.elisp-rice.flakeModules.default
       ];
 
-      # Configure the Emacs environment in Nix.
-      elisp-rice = {
-        localPackages = inputs.rice-src.elisp-rice.packages;
-        src = inputs.rice-src.outPath;
-        lockDir = inputs.rice-lock.outPath;
-        lockInputName = "rice-lock";
-        github = {
-          inherit systems;
-        };
-        registries = inputs.registries.lib.registries;
+      elisp-rice = inputs.elisp-rice.lib.configFromInputs {
+        inherit (inputs) rice-src rice-lock registries systems;
       };
 
       perSystem = {
