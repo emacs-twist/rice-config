@@ -48,7 +48,7 @@
       ];
 
       elisp-rice = inputs.elisp-rice.lib.configFromInputs {
-        inherit (inputs) rice-src rice-lock registries systems;
+        inherit (inputs) rice-src rice-lock registries systems melpa;
       };
 
       perSystem = {
