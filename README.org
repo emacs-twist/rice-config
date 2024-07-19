@@ -1,4 +1,4 @@
-* Meta Nix Flake for Developing Emacs Lisp Projects
+* Nix Meta-Flake for Developing Emacs Lisp Projects
 This is a Nix flake that lets you configure checking of Emacs Lisp packages (both locally and on CI).
 
 There are [[#alternatives][several alternatives]] for Emacs Lisp CI, but this project is unique in that it is powered by Nix and provides the following most notable features:
