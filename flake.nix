@@ -35,6 +35,7 @@
   outputs = {
     flake-parts,
     nixpkgs,
+    self,
     ...
   } @ inputs: let
     systems = import inputs.systems;
@@ -88,9 +89,14 @@
         pre-commit.settings.hooks.deadnix.enable = true;
 
         # pre-commit checks for elisp files
-        pre-commit.settings.hooks.elisp-byte-compile.enable = true;
-        # You can run byte-compile only in pre-commit.
-        pre-commit.settings.hooks.elisp-byte-compile.stages = ["push"];
+        pre-commit.settings.hooks.elisp-byte-compile = {
+          enable = true;
+          description = "Byte-compile Emacs Lisp files";
+          entry = "${self.packages.${system}.byte-compile}/bin/elisp-byte-compile";
+          files = "\\.el$";
+          # You can run byte-compile only in pre-push.
+          stages = ["push"];
+        };
       };
     };
 }
