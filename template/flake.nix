@@ -7,6 +7,10 @@
         [
           (abort "Please set the package name (without .el)")
         ];
+      # Configure tests
+      tests = {
+        # buttercup.enable = true;
+      };
     };
   };
 }
