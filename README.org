@@ -63,17 +63,20 @@ You have to add ~flake.nix~ to your individual projects.
 While it is possible to use its flake API only with ~nix~ command, the commands are quite verbose and hence your developer experience would be painful.
 On your machine, it is recommended to use [[https://just.systems/man/en/][just]] (which is like a modern Make for running commands) for the development workflow.
 
-I have created [[https://github.com/akirak/flake-templates?tab=readme-ov-file#emacs-lisp][a flake template]] that provides a boilerplate with ~flake.nix~, ~justfile~, and some other typical configuration files.
-With this template, you can get started with local development and GitHub Actions CI by editing some parameters.
-You can add the configuration files to your existing project by running the following command:
+I have created [[file:template][a flake template]] that provides a boilerplate with ~flake.nix~, ~justfile~, and some other typical configuration files.
+With this template, you can get started with Rice just by editing parameters.
+
+Using the template, you can add the configuration files to your existing project by running the following command:
 
 #+begin_src sh
-  nix flake init -t github:akirak/flake-templates#emacs-lisp
+  nix flake init -t "github:emacs-twist/rice-config?dir=template"
 #+end_src
 
-The content of ~flake.nix~ in individual projects should be minimal.
-If you have initialized the file from the flake template, you only have to set ~elisp-rice.packages~ in the outputs.
-An example is as follows:
+Because of the ~?~ character, you probably have to quote the URL, though it depends on your shell.
+
+~flake.nix~ in an individual project is just an input to this flake (i.e. ~rice-config~), and it is designed to be minimal.
+You can initialize the file from the flake template, you only have to set ~elisp-rice.packages~ in the outputs.
+A minimal example is as follows:
 
 #+begin_src nix
   {
@@ -89,7 +92,22 @@ In this example, ~hello~ is the name of your package.
 If your package contains multiple source files, you only specify the main library.
 If your repository contains multiple packages, you have to specify all of them in ~packages~.
 
-Also, open ~justfile~ to adapt it to your project.
+You can also set up tests by setting ~tests~:
+
+#+begin_src nix
+  {
+    outputs = {...}: {
+      elisp-rice = {
+        packages = ["hello"];
+        tests = {
+          buttercup.enable = true;
+        };
+      };
+    };
+  }
+#+end_src
+
+Open ~justfile~ to adapt it to your project.
 You only need to edit variables.
 You must set ~package~, and you may also have to set ~rice-config~, ~melpa~, and ~emacs-version~ as well.
 
@@ -219,7 +237,17 @@ Internally, it uses ~entr~ to watch file changes.
 *** Testing (manual/automated)
 Testing should be done on all supported Emacs versions, which can be tedious for package authors and maintainers.
 This is another area where Rice is trying to improve.
+
+If you have set up a test suite via ~tests~ output of the flake, you can run tests using ~test-*~ recipe:
+
+#+begin_src sh
+  just test-buttercup
+#+end_src
+
+It runs ~test-buttercup-with-emacs-snapshot~ package of the flake with the inputs.
 **** Shell with a specific Emacs version
+Instead of running the pre-configured test suite for your package, it is also possible to run a given command in a package-enabled Emacs environment.
+
 You can enter a shell with the package(s) available:
 
 #+begin_src sh
@@ -242,7 +270,7 @@ The following should be covered in the future:
 
 - [[https://github.com/purcell/package-lint][package-lint]]: This requires ~package.el~ to download dependencies, so it requires internet connection, which cannot be run in a pure Nix environment. It should be an application provided under ~packages~ output of the flake.
 - ~checkdoc~ and other minor checks that can be run statically: This should be an optional addition to ~checks~. Only one Emacs version (either the latest release or a snapshot version) would be enough.
-- Tests (ERT, [[https://github.com/jorgenschaefer/emacs-buttercup/][buttercup]], etc.): The user may depend on a third-party package for testing. Thus the rice-config should allow the user to define extra packages in individual package flakes. The extra packages will be available in the Emacs environments provided from ~packages~ (and its wrapper, ~just shell-emacs~).
+- Add support for more test packages, e.g. ERT.
 
 The above tasks are likely to require enhancement of the rice module.
 ** Alternatives
