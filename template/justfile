@@ -30,7 +30,7 @@ show *OPTIONS:
 
 # Evaluate an attribute on the flake, e.g. just eval melpaRecipes.
 eval ATTR *OPTIONS:
-    nix eval {{rice-config}}\#{{ATTR}} {{OPTIONS}} {{ common-options-with-lock }}
+    nix eval {{rice-config}}\#{{ATTR}} {{OPTIONS}} {{ common-options-with-lock }} --override-input systems github:nix-systems/{{ arch }} --allow-import-from-derivation
 
 # Generate a lock directory.
 lock *OPTIONS:
