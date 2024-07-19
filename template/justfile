@@ -52,3 +52,6 @@ check-compile:
 # Enter a shell for running tests
 shell-emacs *OPTIONS:
     nix shell {{ rice-config }}\#{{ emacs }}-with-packages {{ common-options-with-lock }} {{ OPTIONS }}
+
+test-buttercup *OPTIONS:
+    nix run {{ rice-config }}\#test-buttercup-with-{{ emacs }} {{ common-options-with-lock }} {{ OPTIONS }}
