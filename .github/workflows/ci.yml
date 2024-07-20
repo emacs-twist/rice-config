@@ -3,6 +3,10 @@ name: CI
 on:
   workflow_dispatch:
   pull_request:
+    paths-ignore:
+      - '*.md'
+      - '*README.*'
+      - 'templates/**'
   push:
     branches:
       master
@@ -10,6 +14,7 @@ on:
       - '*.md'
       - '*README.*'
 
+      - 'templates/**'
 jobs:
   check-flake:
     runs-on: ubuntu-latest
