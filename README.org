@@ -69,7 +69,7 @@ With this template, you can get started with Rice just by editing parameters.
 Using the template, you can add the configuration files to your existing project by running the following command:
 
 #+begin_src sh
-  nix flake init -t "github:emacs-twist/rice-config?dir=template"
+  nix flake init -t "github:emacs-twist/rice-config?dir=templates"
 #+end_src
 
 Because of the ~?~ character, you probably have to quote the URL, though it depends on your shell.
