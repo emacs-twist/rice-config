@@ -2,7 +2,7 @@ name: Check template
 on:
   push:
     paths:
-      - template/**
+      - templates/default/**
   workflow_dispatch:
 jobs:
   check:
@@ -13,5 +13,5 @@ jobs:
       - name: Install just
         run: nix profile install nixpkgs#just
       - name: Lint justfile
-        working-directory: template
+        working-directory: templates/default
         run: just -l
