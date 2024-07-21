@@ -177,17 +177,21 @@ By default, the location is ~.rice-lock/default~, but you can create multiple lo
 However, it is recommended to use the minimum version of Emacs supported by your package to generate a lock directory that contains all dependencies:
 
 #+begin_src sh
-  just --set emacs emacs-27-1 lock
+  just --set emacs emacs-lowest lock
 #+end_src
 
-The above command generates a lock directory that contains all dependencies to make your package run on Emacs 27.1.
+The above command generates a lock directory that contains all dependencies to make your package run on the minimum supported version of Emacs.
 Generally speaking, a newer version of Emacs has more built-in packages, so it's safe to use the oldest version of Emacs.
 You can still create multiple versions of lock directories.
+
+Note: You can set ~emacs~ to any package provided by [[https://github.com/purcell/nix-emacs-ci][nix-emacs-ci]].
+This includes stable release versions (e.g. ~emacs-28-1~) and snapshot versions (i.e. ~emacs-snapshot~ and ~emacs-release-snapshot~).
+Furthermore, rice adds an aliased version named ~emacs-lowest~ which points to the minimum Emacs version supported by your package(s).
 
 To override an existing directory, you need to set ~--force~ option:
 
 #+begin_src sh
-  just --set emacs emacs-27-1 lock --force
+  just --set emacs emacs-lowest lock --force
 #+end_src
 
 The lock command supports some other options.
