@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  byte-compile:
+  compile-and-test:
     uses: emacs-twist/elisp-workflows/.github/workflows/compile-and-test.yml@master
     # with:
       # rice-config: github:emacs-twist/rice-config
