@@ -6,7 +6,7 @@ There are [[#alternatives][several alternatives]] for Emacs Lisp CI, but this pr
 - In continuous integration, this project makes it easy to run byte-compile (and testing in the future) on all Emacs versions supported by your package(s). It is aimed at authors who maintain a number of Emacs Lisp packages.
 - In local usage, it can integrate with [[https://github.com/cachix/git-hooks.nix][Nix Git hooks]], so it even nicely supports projects that contain multiple programming languages.
 
-This is a meta-framework in that you can reuse a single flake across multiple projects.
+This is a meta-framework which allows you to reuse a single flake across multiple projects.
 You can fork this repository to personalize your workflows and then use it in all of your Emacs Lisp projects.
 If your project is complex enough to require a specific flake configuration, you can copy the ~flake.nix~ from this repository and use it in the single repository.
 The common code is maintained in [[https://github.com/emacs-twist/elisp-rice][a separate repository]] as a [[https://flake.parts/][flake-parts]] module, so you don't have to merge upstream bugfixes by hand.
