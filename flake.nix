@@ -48,55 +48,63 @@
       ];
 
       elisp-rice = inputs.elisp-rice.lib.configFromInputs {
-        inherit (inputs) rice-src rice-lock registries systems melpa;
+        inherit (inputs)
+          rice-src
+          rice-lock
+          registries
+          systems
+          melpa
+          ;
       };
 
-      perSystem = {
-        system,
-        config,
-        pkgs,
-        ...
-      }: {
-        # Configure the perSystem environment.
-        _module.args.pkgs = import nixpkgs {
-          inherit system;
-          overlays = [
-            # This overlay is required to make `emacsTwist` function available
-            # in the flake-parts module.
-            inputs.twist.overlays.default
-          ];
+      perSystem =
+        {
+          system,
+          config,
+          pkgs,
+          ...
+        }:
+        {
+          # Configure the perSystem environment.
+          _module.args.pkgs = import nixpkgs {
+            inherit system;
+            overlays = [
+              # This overlay is required to make `emacsTwist` function available
+              # in the flake-parts module.
+              inputs.twist.overlays.default
+            ];
+          };
+
+          # Configure the per-system Emacs package set.
+          elisp-rice = {
+            enableElispPackages = true;
+            emacsPackageSet = inputs.emacs-ci.packages.${system};
+            defaultEmacsPackage = inputs.emacs-ci.packages.${system}.emacs-snapshot;
+          };
+
+          # Enable pre-commit by entering the Nix devShell.
+          devShells.default = config.pre-commit.devShell;
+
+          # elisp-byte-compile runs a local version of Emacs, which is available
+          # in the Nix sandbox. You must disable this check to enable the
+          # byte-compile hook.
+          pre-commit.check.enable = false;
+          pre-commit.settings.excludes = [ "^.rice-lock/" ];
+
+          # pre-commit checks for non-elisp files (optional)
+          pre-commit.settings.hooks.actionlint.enable = true;
+          pre-commit.settings.hooks.alejandra.enable = true;
+          pre-commit.settings.hooks.deadnix.enable = true;
+
+          # pre-commit checks for elisp files
+          pre-commit.settings.hooks.elisp-byte-compile = {
+            enable = true;
+            description = "Byte-compile Emacs Lisp files";
+            entry = "${self.packages.${system}.byte-compile}/bin/elisp-byte-compile";
+            files = "\\.el$";
+            # You can run byte-compile only in pre-push.
+            stages = [ "push" ];
+          };
         };
-
-        # Configure the per-system Emacs package set.
-        elisp-rice = {
-          enableElispPackages = true;
-          emacsPackageSet = inputs.emacs-ci.packages.${system};
-          defaultEmacsPackage = inputs.emacs-ci.packages.${system}.emacs-snapshot;
-        };
-
-        # Enable pre-commit by entering the Nix devShell.
-        devShells.default = config.pre-commit.devShell;
-
-        # elisp-byte-compile runs a local version of Emacs, which is available
-        # in the Nix sandbox. You must disable this check to enable the
-        # byte-compile hook.
-        pre-commit.check.enable = false;
-        pre-commit.settings.excludes = ["^.rice-lock/"];
-
-        # pre-commit checks for non-elisp files (optional)
-        pre-commit.settings.hooks.actionlint.enable = true;
-        pre-commit.settings.hooks.alejandra.enable = true;
-        pre-commit.settings.hooks.deadnix.enable = true;
-
-        # pre-commit checks for elisp files
-        pre-commit.settings.hooks.elisp-byte-compile = {
-          enable = true;
-          description = "Byte-compile Emacs Lisp files";
-          entry = "${self.packages.${system}.byte-compile}/bin/elisp-byte-compile";
-          files = "\\.el$";
-          # You can run byte-compile only in pre-push.
-          stages = ["push"];
-        };
-      };
     };
 }
