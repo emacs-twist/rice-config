@@ -32,15 +32,21 @@
     extra-trusted-public-keys = "emacs-ci.cachix.org-1:B5FVOrxhXXrOL0S+tQ7USrhjMT5iOPH+QN9q0NItom4=";
   };
 
-  outputs = {
-    flake-parts,
-    nixpkgs,
-    self,
-    ...
-  } @ inputs: let
-    systems = import inputs.systems;
-  in
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    {
+      flake-parts,
+      nixpkgs,
+      self,
+      ...
+    }@inputs:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
       inherit systems;
       imports = [
         inputs.pre-commit-hooks-nix.flakeModule
